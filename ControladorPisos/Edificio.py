@@ -24,11 +24,13 @@ class Piso:
             self.boton_abajo = True
             self.abrir_ascensor()
             self.boton_abajo = False
+
     def abrir_ascensor(self):
         print("<<<<<< ABRIR ASCENSOR >>>>>>")
         self.ascensor.abierto = True
-        self.ascensor.abierto = False
         time.sleep(2)
+        self.ascensor.abierto = False
+        print("<<<<<< CERRAR ASCENSOR  >>>>>>")
 
 class Ascensor:
     def __init__(self, botones_de_piso):
@@ -38,24 +40,26 @@ class Ascensor:
         self.abierto = False
 
     def ir_al_piso(self, numero_de_piso):
-        for boton in self.botones_de_piso:
-            if boton.numero_de_piso == numero_de_piso:
-                print('~~~~~~~~~~~~~~~~~~~')
-                print(f' ~~~ SUBIR AL ~~~ \n"PISO: " => {boton.numero_de_piso}')
-                print(f'Piso Actual: {self.piso_actual}')
-                print(">>>>>> CERRAR ASCENSOR <<<<<<")
-                time.sleep(2)
-                print("Subiendo:^^^^^^^")
-                time.sleep(2)
-                while self.piso_actual != numero_de_piso:
-                    if self.piso_actual < numero_de_piso:
-                        self.subir_piso()
-                    else:
-                        self.bajar_piso()
-                    print("Piso: " + str(self.piso_actual))
-                    print('----------------')
-                break
-                Case 
+        if numero_de_piso > len(self.botones_de_piso) - 1:
+            print(f'Error!!! Este piso  {numero_de_piso} no existe en el edificio torre.')
+            return
+
+        botones = list(filter(lambda button: button.numero_de_piso == numero_de_piso, self.botones_de_piso))
+        print('----------------')
+        boton_presionado = botones[0]
+        print(f'--Yendo al Piso: {boton_presionado.numero_de_piso}')
+        print(f'Piso Actual: {self.piso_actual}')
+        while self.piso_actual != numero_de_piso:
+            if self.piso_actual < numero_de_piso:
+                self.subir_piso()
+            else:
+                self.bajar_piso()
+            print("Piso : " + str(self.piso_actual))
+
+            print('----------------')
+        else:
+            print(f'LLegaste al piso !!{numero_de_piso} ')
+            print('----------------')
 
     def subir_piso(self):
         self.piso_actual = self.piso_actual + 1
@@ -63,26 +67,36 @@ class Ascensor:
     def bajar_piso(self):
         self.piso_actual = self.piso_actual - 1
 
-class ControlDeDirecciones:
-    def solicitar_ascensor(self, piso_actual):
-        ascensor_disponible = min(self.ascensores, key=lambda ascensor: len(ascensor.destinos_del_piso))
-        ascensor_disponible.ir_a_piso(piso_actual)
-        ascensor_disponible.ir_a_piso(ascensor_disponible.ir_a_piso)
-
 class BotonDePiso:
     def __init__(self, numero_de_piso):
         self.numero_de_piso = numero_de_piso
         self.encendido = False
 
-botones_de_pisos = [BotonDePiso(i) for i in range(6)]
-ascensorA = Ascensor(botones_de_pisos)
+class Configuracion():
+    def __init__(self, numero_de_piso, ascensor):
+        self.numero_de_piso = numero_de_piso
+        self.ascensor = ascensor
+        self.botones_de_pisos_A = [BotonDePiso(i) for i in range(self.numero_de_piso + 1)]
+        self.botones_de_pisos_B = [BotonDePiso(i) for i in range(self.numero_de_piso + 1)]
+        self.botones_de_pisos_C = [BotonDePiso(i) for i in range(self.numero_de_piso + 1)]
+        self.ascensorA = Ascensor(self.botones_de_pisos_A)
+        self.ascensorB = Ascensor(self.botones_de_pisos_B)
+        self.ascensorC = Ascensor(self.botones_de_pisos_C)
+        self.pisos = [Piso(i, self.ascensorA) for i in range(self.numero_de_piso + 1)]
 
-pisos = [Piso(i, ascensorA) for i in range(6)]
 
-pisos[0].llamar_ascensor(arriba=True)
-ascensorA.ir_al_piso(5)
+edificio_torre = Configuracion(20, 3)
+edificio_torre.pisos[0].llamar_ascensor(arriba=True)
+print('------ASCENSOR "A"----------')
+edificio_torre.ascensorA.ir_al_piso(25)
+edificio_torre.ascensorA.ir_al_piso(2)
 
-pisos[3].llamar_ascensor(arriba=False)
-ascensorA.ir_al_piso(0)
+print('------ASCENSOR "B"----------')
+edificio_torre.ascensorB.ir_al_piso(5)
+edificio_torre.ascensorB.ir_al_piso(1)
+edificio_torre.ascensorB.ir_al_piso(0)
+edificio_torre.ascensorB.ir_al_piso(2)
 
-# edificio_torre = Configuracion(15, 2)
+print('------ASCENSOR "C"----------')
+edificio_torre.ascensorC.ir_al_piso(6)
+edificio_torre.ascensorC.ir_al_piso(3)
