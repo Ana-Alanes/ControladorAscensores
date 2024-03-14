@@ -60,20 +60,7 @@ class Ascensor:
         else:
             print(f'LLegaste al piso !!{numero_de_piso} ')
             print('----------------')
-    # -------------------------------------
-    #     while self.piso_actual < numero_de_piso:
-    #             self.piso_actual += 1
-    #             print(f"Piso actual: {self.piso_actual}")
-    #     elif numero_de_piso < self.piso_actual:
-    #         print("Bajando...")
-    #
-    #     while self.piso_actual > numero_de_piso:
-    #             self.piso_actual -= 1
-    #             print(f"Piso actual: {self.piso_actual}")
-    #
-    #     else:
-    #         print("Ya estás en ese piso")
-    # -------------------------------------
+
 
     def subir_piso(self):
         self.piso_actual = self.piso_actual + 1
@@ -109,7 +96,7 @@ print('------ASCENSOR "B"----------')
 edificio_torre.ascensorB.ir_al_piso(5)
 edificio_torre.ascensorB.ir_al_piso(1)
 edificio_torre.ascensorB.ir_al_piso(0)
-edificio_torre.ascensorB.ir_al_piso(-2)
+edificio_torre.ascensorB.ir_al_piso(2)
 
 print('------ASCENSOR "C"----------')
 edificio_torre.ascensorC.ir_al_piso(6)
